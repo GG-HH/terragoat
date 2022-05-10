@@ -24,9 +24,12 @@ resource azurerm_app_service "app-service1" {
   location            = var.location
   name                = "terragoat-app-service-${var.environment}${random_integer.rnd_int.result}"
   resource_group_name = azurerm_resource_group.example.name
-  https_only          = false
+  https_only          = true
   site_config {
-    min_tls_version = "1.1"
+    http2_enabled = true
+    ftps_state = "Disabled"
+    dotnet_framework_version = "v6.0"
+    min_tls_version = "1.2"
   }
   tags = {
     git_commit           = "81738b80d571fa3034633690d13ffb460e1e7dea"
@@ -38,6 +41,18 @@ resource azurerm_app_service "app-service1" {
     git_repo             = "terragoat"
     yor_trace            = "13be096d-c599-46e5-bf54-51c6e9732858"
   }
+  auth_settings {
+    enabled = true
+  }
+  logs {
+    failed_request_tracing_enabled = true
+    detailed_error_messages_enabled = true
+  }
+  storage_account {
+    type = "AzureFiles"
+  }
+  client_cert_enabled = true
+  identity = true
 }
 
 resource azurerm_app_service "app-service2" {
@@ -48,7 +63,7 @@ resource azurerm_app_service "app-service2" {
   https_only          = true
 
   auth_settings {
-    enabled = false
+    enabled = true
   }
   tags = {
     git_commit           = "5c6b5d60a8aa63a5d37e60f15185d13a967f0542"
@@ -60,5 +75,19 @@ resource azurerm_app_service "app-service2" {
     git_repo             = "terragoat"
     yor_trace            = "ec8295ab-af68-4cff-b0f1-b0cf5eaf1b75"
   }
+  logs {
+    failed_request_tracing_enabled = true
+    detailed_error_messages_enabled = true
+  }
+  site_config {
+    http2_enabled = true
+    ftps_state = "Disabled"
+    dotnet_framework_version = "v6.0"
+  }
+  storage_account {
+    type = "AzureFiles"
+  }
+  client_cert_enabled = true
+  identity = true
 }
 
