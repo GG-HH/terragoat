@@ -17,3 +17,5 @@ resource "aws_security_group" "bad_example" {
     "0.0.0.0/0"] # very broad network subnet trigger GG_IAC_0003
   }
  }
+
+
